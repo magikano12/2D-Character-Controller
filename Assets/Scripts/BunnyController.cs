@@ -17,6 +17,8 @@ public class BunnyController : MonoBehaviour
 
     public float jumpForce = 700;
 
+    bool doubleJump = false;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -47,14 +49,23 @@ public class BunnyController : MonoBehaviour
         {
             Flip();
         }
+        if(grounded)
+        {
+            doubleJump = false;
+        }
 	}
     private void Update()
     {
         Rigidbody2D rb2d = GetComponent<Rigidbody2D>();
-        if (grounded&&Input.GetKeyDown(KeyCode.Space))
+        if ((grounded||!doubleJump)&&Input.GetKeyDown(KeyCode.Space))
         {
             anim.SetBool("Ground", false);
             rb2d.AddForce(new Vector2(0, jumpForce));
+
+            if(!doubleJump&&!grounded)
+            {
+                doubleJump = true;
+            }
         }
     }
     void Flip()
